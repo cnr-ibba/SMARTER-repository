@@ -1,0 +1,79 @@
+
+version: "3.8"
+services:
+  # Create a composed Django-Postgres-NGINX instance
+  db:
+    # get the latest mysql server
+    image: mariadb:10.10
+
+    # Set db environment
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+    # to export volume, as recommeded in https://registry.hub.docker.com/u/library/mysql/
+    volumes:
+      - type: bind
+        source: ./mysql-data/
+        target: /var/lib/mysql
+
+
+  uwsgi:
+    # a custom image for django
+    build:
+      # required to include poetry stuff into uwsgi image
+      context: .
+      dockerfile: uwsgi/Dockerfile
+
+    # Set db environment
+    environment:
+      MYSITE_DATABASE: ${MYSQL_DATABASE}
+      MYSITE_USER: ${MYSQL_USER}
+      MYSITE_PASSWORD: ${MYSQL_PASSWORD}
+      SECRET_KEY: ${SECRET_KEY}
+      DEBUG: ${DEBUG}
+
+    # exec a different command from image
+    command: uwsgi --ini /var/uwsgi/mysite_uwsgi.ini --memory-report
+
+    # set working dir for uwsgi
+    working_dir: /var/uwsgi/
+
+    # define volumes
+    volumes:
+      - type: bind
+        source: ./django-data/
+        target: /var/uwsgi/
+
+    # Expose the default port
+
+    # link container to database
+    links:
+      - db
+
+
+  nginx:
+    # a custom image for NGINX
+    build: ./nginx
+
+    volumes:
+      - type: bind
+        source: ./nginx/conf.d/
+        target: /etc/nginx/conf.d/
+
+      - type: bind
+        source: ./django-data/
+        target: /var/uwsgi/
+
+    ports:
+      - "10080:80"
+
+    # link container uwsgi
+    links:
+      - uwsgi
+
+
+networks:
+  default:
