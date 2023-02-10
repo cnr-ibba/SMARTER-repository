@@ -29,17 +29,17 @@ services:
 
     # Set db environment
     environment:
-      MYSITE_DATABASE: ${MYSQL_DATABASE}
-      MYSITE_USER: ${MYSQL_USER}
-      MYSITE_PASSWORD: ${MYSQL_PASSWORD}
+      SMARTER_DATABASE: ${MYSQL_DATABASE}
+      SMARTER_USER: ${MYSQL_USER}
+      SMARTER_PASSWORD: ${MYSQL_PASSWORD}
       SECRET_KEY: ${SECRET_KEY}
       DEBUG: ${DEBUG}
 
     # exec a different command from image
-    command: uwsgi --ini /var/uwsgi/mysite_uwsgi.ini --memory-report
+    command: uwsgi --ini /var/uwsgi/smarter_uwsgi.ini --memory-report
 
     # set working dir for uwsgi
-    working_dir: /var/uwsgi/
+    working_dir: /var/uwsgi/smarter/
 
     # define volumes
     volumes:

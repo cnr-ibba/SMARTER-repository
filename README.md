@@ -4,7 +4,7 @@
 This guide describe how to build and run Django+MySQL with docker-compose. First of all
 copy this directory in another location since you will modify code in order to
 develop your application. Next, rename the whole directory with a project name.
-In this example, project is set to `mysite`. Replace all `mysite` occurrences with your
+In this example, project is set to `smarter`. Replace all `smarter` occurrences with your
 project name.
 In this project there are directories that will be mounted as data volume:
 this will make easier to
@@ -108,19 +108,19 @@ docker-compose run --rm db sh -c 'mysql -h db --password="${MYSQL_ROOT_PASSWORD}
 
 ### Dumping data from database
 
-With the docker run command, you can do a `mysite` database dump:
+With the docker run command, you can do a `smarter` database dump:
 
 ```bash
-docker-compose run --rm db /bin/sh -c 'mysqldump -h db -u root --password=$MYSQL_ROOT_PASSWORD mysite' > dump.sql
+docker-compose run --rm db /bin/sh -c 'mysqldump -h db -u root --password=$MYSQL_ROOT_PASSWORD smarter' > dump.sql
 ```
 
 ### Loading data in database
 
 With the docker run command, you can import a `.sql` file by adding its path as
-a docker volume, for instance, if you are in `mysite_dump.sql` directory:
+a docker volume, for instance, if you are in `smarter_dump.sql` directory:
 
 ```bash
-cat dump.sql | docker-compose run --rm db /bin/sh -c 'mysql -h db -u root --password=$MYSQL_ROOT_PASSWORD mysite'
+cat dump.sql | docker-compose run --rm db /bin/sh -c 'mysql -h db -u root --password=$MYSQL_ROOT_PASSWORD smarter'
 ```
 
 ### Access database using adminer
@@ -184,13 +184,13 @@ in poetry documentation to have more information.
 
 ### Creating a project for the first time
 
-For such example, we suppose that the django project name will be `mysite` as stated
+For such example, we suppose that the django project name will be `smarter` as stated
 by the [django tutorial](https://docs.djangoproject.com/en/1.11/intro/tutorial01/#creating-a-project).
-The `mysite_uwsgi.ini` in `django-data` directory contains uwsgi configuration for this application.
-The default path of the application is the `mysite` directory of the django tutorial.
+The `smarter_uwsgi.ini` in `django-data` directory contains uwsgi configuration for this application.
+The default path of the application is the `smarter` directory of the django tutorial.
 If you want to modify the project directories, remember to modify `docker-compose.yml`
-and to rename `mysite_uwsgi.ini`commands according your needs.
-First, you need to generate an empty django project (`mysite` in this example),
+and to rename `smarter_uwsgi.ini`commands according your needs.
+First, you need to generate an empty django project (`smarter` in this example),
 since it's no tracked with this project. If you want to track your project
 modifications, you will do add manually your django folder to your project.
 To create a new project folder, we will use the `django-admin` utility from
@@ -198,7 +198,7 @@ the django container. This will create a new project folder in  `/var/uwsgi/`,
 which is an exported volume of `django-data` folder of this project:
 
 ```bash
-docker-compose run --rm uwsgi django-admin startproject mysite
+docker-compose run --rm uwsgi django-admin startproject smarter
 ```
 
 This will build the django image and runs the `django-admin` script. If there
@@ -238,15 +238,15 @@ ALLOWED_HOSTS = ['*']
 
 Now we need to set up the database connection. You may want
 change default ownership to edit files. Replace the `DATABASES = ...` definition
-in `django-data/mysite/mysite/settings.py` accordingly your project database settings:
+in `django-data/smarter/smarter/settings.py` accordingly your project database settings:
 
 ```python
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('MYSITE_DATABASE'),
-        'USER': config('MYSITE_USER'),
-        'PASSWORD': config('MYSITE_PASSWORD'),
+        'NAME': config('SMARTER_DATABASE'),
+        'USER': config('SMARTER_USER'),
+        'PASSWORD': config('SMARTER_PASSWORD'),
         'HOST': 'db',
         'PORT': 3306,
         'OPTIONS': {
@@ -267,13 +267,13 @@ TIME_ZONE = 'Europe/Rome'
 
 We have to set also the static file positions. It's better to prepend the django
 project names in order to write rules to serve static files via nginx. Here is an
-example for mysite project:
+example for smarter project:
 
 ```python
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-STATIC_URL = '/mysite/static/'
-MEDIA_URL  = '/mysite/media/'
+STATIC_URL = '/smarter/static/'
+MEDIA_URL  = '/smarter/media/'
 
 # collect all Django static files in the static folder
 STATIC_ROOT = BASE_DIR / "static"
@@ -284,13 +284,13 @@ The `STATIC_URL` variable will tell to django (uwsgi) how to define links to sta
 files, and the `STATIC_ROOT` variable will set the position in which static files
 (as the admin .css files) will be placed. The `MEDIA_ROOT` and `MEDIA_URL` variables
 have the same behavior. You may want to create a `/static` and `/media`
-directory inside `mysite`, in order to place media files. Then you have to call
+directory inside `smarter`, in order to place media files. Then you have to call
 the `collectstatic` command in order to place the static files in their directories:
 
 ```bash
-mkdir django-data/mysite/static/
-mkdir django-data/mysite/media/
-docker-compose run --rm uwsgi python mysite/manage.py collectstatic
+mkdir django-data/smarter/static/
+mkdir django-data/smarter/media/
+docker-compose run --rm uwsgi python smarter/manage.py collectstatic
 ```
 
 #### Auto restart uwsgi when code is modified
@@ -310,10 +310,10 @@ on your application directory, for example:
 
 ```yaml
   # set working dir for uwsgi
-  working_dir: /var/uwsgi/mysite
+  working_dir: /var/uwsgi/smarter
 ```
 
-This allows to call `manage.py` without specifying the `mysite` project directory.
+This allows to call `manage.py` without specifying the `smarter` project directory.
 
 #### Initialize django database for the first time
 
@@ -356,7 +356,7 @@ different processes or listen for a different number of connection, you may modi
 this file. The `default.conf` located in `conf.d` is the file which need to be modified
 accordingly to your project location. You can modify this file without building
 nginx image, since this directory is imported as a volume in nginx container.
-In this sample configuration, the served application is supposed to be under `mysite`
+In this sample configuration, the served application is supposed to be under `smarter`
 location. Django static files are served via nginx by sharing volumes between
 django `uwsgi` container. This container expose the standard 80 port outside, but
 `docker-compose.yml` could bind this port to a different one
@@ -381,7 +381,7 @@ need to be reconfigured as the first instance. You can also run management comma
 with Docker. To migrate django database, for example, you can run:
 
 ```bash
-docker-compose run --rm uwsgi python mysite/manage.py migrate
+docker-compose run --rm uwsgi python smarter/manage.py migrate
 ```
 
 Or
@@ -399,7 +399,7 @@ Place the followin code inside NGINX server environment. Remember to specify the
 port exported by your docker NGINX instance:
 
 ```conf
-location /mysite/ {
+location /smarter/ {
   # set variable in location
   set $my_port 10080;
 

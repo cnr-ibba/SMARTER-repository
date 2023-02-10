@@ -2,9 +2,9 @@
 mysql-data/
 postgres-data/
 .env
-
-# remove if you want to track mysite project
-django-data/mysite/
+*password*
+django-data/smarter/static/
+django-data/smarter/media/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

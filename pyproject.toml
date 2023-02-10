@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "mysite"
+name = "smarter-repository"
 version = "0.1.0"
-description = "Django + Daphne + MySQL in a docker composed image"
+description = "SMARTER data repository"
 authors = ["Paolo Cozzi <bunop@libero.it>"]
 license = "GPL-3.0-or-later"
 readme = "README.md"

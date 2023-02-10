@@ -15,7 +15,7 @@
 # inspired from https://bmaingret.github.io/blog/2021-11-15-Docker-and-Poetry
 # Those variables are defined before the FROM scope: to use them after, recall
 # ARG in build stages
-ARG APP_NAME=mysite
+ARG APP_NAME=smarter
 ARG APP_PATH=/opt/$APP_NAME
 ARG PYTHON_VERSION=3.11
 ARG POETRY_VERSION=1.3.2
@@ -69,8 +69,7 @@ LABEL maintainer="paolo.cozzi@ibba.cnr.it"
 # IMPORTANT!: without this redefinition, you can't use variables defined
 # before the first FROM statement
 ARG APP_PATH
-ARG APP_NAME
-ARG VIRTUAL_ENV=${APP_PATH}
+ARG VIRTUAL_ENV=${APP_PATH}/.venv
 
 # synchronize timezone for container
 # https://forums.docker.com/t/synchronize-timezone-from-host-to-container/39116
@@ -99,10 +98,10 @@ COPY uwsgi/wait-for-mysql.sh /usr/local/bin
 RUN chmod 755 /usr/local/bin/wait-for-mysql.sh
 
 # copy the application from build stage
-COPY --from=0 ${APP_PATH}/.venv ${APP_PATH}
-WORKDIR /var/uwsgi/${APP_NAME}
+COPY --from=0 ${APP_PATH} ${APP_PATH}
+WORKDIR ${APP_PATH}
 
-# Set ${APP_PATH} directory as VOLUME
+# Set uwsgi directory as VOLUME
 VOLUME ${APP_PATH}
 
 # Expose the default port
