@@ -68,7 +68,7 @@ services:
         target: /var/uwsgi/
 
     ports:
-      - "10080:80"
+      - "21080:80"
 
     # link container uwsgi
     links:
