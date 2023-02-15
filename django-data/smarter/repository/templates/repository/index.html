@@ -1,7 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-    Welcome to SMARTER Repository!
+    <div class="container vertical-center">
+        <div class="row align-items-center justify-content-center">
+            <div class="text-center">
+                <img src="{% static 'images/Sm_compl_2.png' %}" width="75%" alt="SMARTER logo full">
+            </div>
+            <div class="text-center">
+                <h1 class="h1 text-success">Welcome to SMARTER Data Repository!</h1>
+            </div>
+        </div>
+    </div>
 
 {% endblock content %}
