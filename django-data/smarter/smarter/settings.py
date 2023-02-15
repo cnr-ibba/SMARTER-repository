@@ -28,6 +28,12 @@ DEBUG = config('DEBUG', cast=bool, default=False)
 
 ALLOWED_HOSTS = ['*']
 
+# required to allow toolbar in docker containers. See
+# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#configure-internal-ips
+if DEBUG:
+    import socket  # only if you haven't already imported this
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
 
 # Application definition
 
@@ -39,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap5',
+    'debug_toolbar',
     'repository.apps.RepositoryConfig',
 ]
 
@@ -50,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'smarter.urls'
