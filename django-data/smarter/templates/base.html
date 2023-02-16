@@ -8,11 +8,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smarter Repository</title>
+    <title>{% block title %}Base Template Title{% endblock title %}</title>
     {# Load CSS and JavaScript #}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    {% block custom_css %}{% endblock custom_css %}
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark" aria-label="SMARTER navbar">
@@ -34,6 +35,11 @@
                         <a class="nav-link">About</a>
                     </li>
                 </ul>
+                {% if user.is_authenticated %}
+                    <button type="button" class="btn btn-outline-light">Logout</button>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline-light {% if request.resolver_match.url_name == 'login' %}active{% endif %}">Login</a>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -41,7 +47,6 @@
     {# Display django.contrib.messages as Bootstrap alerts #}
     {% bootstrap_messages %}
 
-    {% block content %}
-    {% endblock %}
+    {% block content %}{% endblock content %}
 </body>
 </html>
