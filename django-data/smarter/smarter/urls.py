@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.views import LoginView, LogoutView
 
-from repository.views import IndexView
+from repository.views import IndexView, DataView
 from accounts.views import UpdatedLoginView
 
 urlpatterns = [
@@ -28,5 +28,6 @@ urlpatterns = [
         'logout',
         LogoutView.as_view(template_name="accounts/logged_out.html"),
         name="logout"),
-    path('', IndexView.as_view(), name="index")
+    path('', IndexView.as_view(), name="index"),
+    path('data', DataView.as_view(), name="data"),
 ]

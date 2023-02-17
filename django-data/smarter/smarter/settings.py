@@ -149,3 +149,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # https://docs.djangoproject.com/en/4.1/ref/settings/#login-redirect-url
 LOGIN_REDIRECT_URL = 'index'
+
+# https://docs.djangoproject.com/en/4.1/ref/settings/#std-setting-LOGIN_URL
+LOGIN_URL = "login"

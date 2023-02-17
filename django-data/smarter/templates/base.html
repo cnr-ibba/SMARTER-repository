@@ -29,7 +29,7 @@
                         <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" aria-current="page" href="{% url 'index' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Data</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'data' %}active{% endif %}" aria-current="page" href="{% url 'data' %}">Data</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link">About</a>
