@@ -24,6 +24,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('__debug__/', include('debug_toolbar.urls')),
     path('login', UpdatedLoginView.as_view(), name="login"),
-    path('logout', LogoutView.as_view(), name="logout"),
+    path(
+        'logout',
+        LogoutView.as_view(template_name="accounts/logged_out.html"),
+        name="logout"),
     path('', IndexView.as_view(), name="index")
 ]

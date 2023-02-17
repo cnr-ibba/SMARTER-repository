@@ -36,9 +36,14 @@
                     </li>
                 </ul>
                 {% if user.is_authenticated %}
-                    <button type="button" class="btn btn-outline-light">Logout</button>
+                <!-- logout using a POST request (GET is deprecated!)
+                https://docs.djangoproject.com/en/4.1/releases/4.1/#log-out-via-get -->
+                <form id="logout-form" method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-light">Logout</button>
+                </form>
                 {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-outline-light {% if request.resolver_match.url_name == 'login' %}active{% endif %}">Login</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-light {% if request.resolver_match.url_name == 'login' %}active{% endif %}">Login</a>
                 {% endif %}
             </div>
         </div>

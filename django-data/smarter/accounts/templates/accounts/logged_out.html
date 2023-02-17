@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock title %}
+
+{% block content %}
+<div class="container mt-2">
+    <div class="row align-items-center justify-content-center">
+        <div class="text-center my-2">
+            Thanks for spending some quality time with the web site today
+        </div>
+        <div class="col-2 mt-2">
+            <a href="{% url 'login' %}" class="btn btn-outline-dark">Log in again</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
