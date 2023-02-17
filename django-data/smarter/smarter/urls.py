@@ -18,11 +18,12 @@ from django.urls import path, include
 from django.contrib.auth.views import LoginView, LogoutView
 
 from repository.views import IndexView
+from accounts.views import UpdatedLoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('__debug__/', include('debug_toolbar.urls')),
-    path('login', LoginView.as_view(), name="login"),
+    path('login', UpdatedLoginView.as_view(), name="login"),
     path('logout', LogoutView.as_view(), name="logout"),
     path('', IndexView.as_view(), name="index")
 ]

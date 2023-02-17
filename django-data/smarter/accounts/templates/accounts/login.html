@@ -46,18 +46,30 @@
                 {% csrf_token %}
 
                 <div class="form-floating">
-                    <input type="username" class="form-control" id="floatingInput" placeholder="Username">
-                    <label for="floatingInput">Username</label>
+                    <input name="username"
+                           type="text"
+                           class="form-control"
+                           id="{{ form.username.id_for_label }}"
+                           placeholder="Username"
+                           required>
+                    <label for="{{ form.username.id_for_label }}">Username</label>
                 </div>
 
                 <div class="form-floating">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                    <label for="floatingPassword">Password</label>
+                    <input name="password"
+                           type="password"
+                           class="form-control"
+                           id="{{ form.password.id_for_label }}"
+                           placeholder="Password"
+                           required>
+                    <label for="{{ form.password.id_for_label }}">Password</label>
                 </div>
 
                 <div class="checkbox mb-3">
                     <label>
-                        <input type="checkbox" value="remember-me"> Remember me
+                        <input name="remember_me"
+                               type="checkbox"
+                               id="id_remember_me"> Remember me
                     </label>
                 </div>
 
