@@ -8,37 +8,46 @@
 {% endblock custom_css %}
 
 {% block content %}
-    {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
-    {% endif %}
-
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
-    {% if next %}
-        {% if user.is_authenticated %}
-        <p>Your account doesn't have access to this page. To proceed,
-        please login with an account that has access.</p>
-        {% else %}
-        <p>Please login to see this page.</p>
-        {% endif %}
-    {% endif %}
-
     <div class="container vertical-center">
         <div class="form-signin w-100 m-auto text-center">
+
+            <img class="mb-4" src="{% static 'images/Sm_mark_3.png' %}" alt="smarter logo" width="25%">
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+            {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Your username and password didn't match. Please try again.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if next %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {% if user.is_authenticated %}
+                Your account doesn't have access to this page. To proceed,
+                please login with an account that has access.
+                {% else %}
+                Please login to see this page.
+                {% endif %}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
             <form method="post" action="{% url 'login' %}">
                 {% csrf_token %}
-                <img class="mb-4" src="{% static 'images/Sm_mark_3.png' %}" alt="smarter logo" width="25%">
-                <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
                 <div class="form-floating">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">Email address</label>
+                    <input type="username" class="form-control" id="floatingInput" placeholder="Username">
+                    <label for="floatingInput">Username</label>
                 </div>
 
                 <div class="form-floating">
