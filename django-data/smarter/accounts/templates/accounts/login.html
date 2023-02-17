@@ -8,76 +8,76 @@
 {% endblock custom_css %}
 
 {% block content %}
-    <div class="container vertical-center">
-        <div class="form-signin w-100 m-auto text-center">
+<div class="container vertical-center">
+    <div class="form-signin w-100 m-auto text-center">
 
-            <img class="mb-4" src="{% static 'images/Sm_mark_3.png' %}" alt="smarter logo" width="25%">
-            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+        <img class="mb-4" src="{% static 'images/Sm_mark_3.png' %}" alt="smarter logo" width="25%">
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
-            {% if form.errors %}
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                Your username and password didn't match. Please try again.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            {% endif %}
-
-            {% if messages %}
-                {% for message in messages %}
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                {% endfor %}
-            {% endif %}
-
-            {% if next %}
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                {% if user.is_authenticated %}
-                Your account doesn't have access to this page. To proceed,
-                please login with an account that has access.
-                {% else %}
-                Please login to see this page.
-                {% endif %}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            {% endif %}
-
-            <form method="post" action="{% url 'login' %}">
-                {% csrf_token %}
-
-                <div class="form-floating">
-                    <input name="username"
-                           type="text"
-                           class="form-control"
-                           id="{{ form.username.id_for_label }}"
-                           placeholder="Username"
-                           required>
-                    <label for="{{ form.username.id_for_label }}">Username</label>
-                </div>
-
-                <div class="form-floating">
-                    <input name="password"
-                           type="password"
-                           class="form-control"
-                           id="{{ form.password.id_for_label }}"
-                           placeholder="Password"
-                           required>
-                    <label for="{{ form.password.id_for_label }}">Password</label>
-                </div>
-
-                <div class="checkbox mb-3">
-                    <label>
-                        <input name="remember_me"
-                               type="checkbox"
-                               id="id_remember_me"> Remember me
-                    </label>
-                </div>
-
-                <input type="hidden" name="next" value="{{ next }}">
-                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-
-                <p class="mt-5 mb-3 text-muted text-center">&copy; IBBA-CNR 2023</p>
-            </form>
+        {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Your username and password didn't match. Please try again.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+        {% endif %}
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if next %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {% if user.is_authenticated %}
+            Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.
+            {% else %}
+            Please login to see this page.
+            {% endif %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <div class="form-floating">
+                <input name="username"
+                        type="text"
+                        class="form-control"
+                        id="{{ form.username.id_for_label }}"
+                        placeholder="Username"
+                        required>
+                <label for="{{ form.username.id_for_label }}">Username</label>
+            </div>
+
+            <div class="form-floating">
+                <input name="password"
+                        type="password"
+                        class="form-control"
+                        id="{{ form.password.id_for_label }}"
+                        placeholder="Password"
+                        required>
+                <label for="{{ form.password.id_for_label }}">Password</label>
+            </div>
+
+            <div class="checkbox mb-3">
+                <label>
+                    <input name="remember_me"
+                            type="checkbox"
+                            id="id_remember_me"> Remember me
+                </label>
+            </div>
+
+            <input type="hidden" name="next" value="{{ next }}">
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+
+            <p class="mt-5 mb-3 text-muted text-center">&copy; IBBA-CNR 2023</p>
+        </form>
     </div>
+</div>
 {% endblock content %}
