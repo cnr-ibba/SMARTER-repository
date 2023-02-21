@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LogoutView
 
-from repository.views import IndexView, DataView
+from repository.views import IndexView, DataSetListView
 from accounts.views import UpdatedLoginView
 
 urlpatterns = [
@@ -29,5 +29,5 @@ urlpatterns = [
         LogoutView.as_view(template_name="accounts/logged_out.html"),
         name="logout"),
     path('', IndexView.as_view(), name="index"),
-    path('data', DataView.as_view(), name="data"),
+    path('datasets', DataSetListView.as_view(), name="dataset-list"),
 ]

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}SMARTER Dataset List{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">WP</th>
+                <th scope="col">Task</th>
+                <th scope="col">Species</th>
+                <th scope="col">Data type</th>
+                <th scope="col">Owner</th>
+                <th scope="col">Embargo</th>
+                <th scope="col">Time series data</th>
+                <th scope="col">Individual data</th>
+                <th scope="col">Contact</th>
+                <th scope="col">Submitted for DB SMARTER</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dataset in object_list %}
+            <tr>
+                <td>{{ dataset.wp }}</td>
+                <td>{{ dataset.task }}</td>
+                <td>{{ dataset.species }}</td>
+                <td>{{ dataset.data_type }}</td>
+                <td>{{ dataset.owner }}</td>
+                <td>{{ dataset.embargo | yesno:"Yes,No,?" }}</td>
+                <td>{{ dataset.time_series | yesno:"Yes,No,?" }}</td>
+                <td>{{ dataset.individual_data | yesno:"Yes,No,?" }}</td>
+                <td>{{ dataset.contact }}</td>
+                <td>{{ dataset.submitted | yesno:"Yes,No,?" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'includes/pagination.html' %}
+
+</div>
+{% endblock content %}
