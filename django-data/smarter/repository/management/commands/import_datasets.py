@@ -10,8 +10,8 @@ Fill Dataset by reading XLS file
 
 import pandas as pd
 
-from django.core.management.base import BaseCommand, CommandError
-from repository.models import Dataset, SPECIES
+from django.core.management.base import BaseCommand
+from repository.models import Dataset
 
 
 columnsDict = {
@@ -42,13 +42,14 @@ class Command(BaseCommand):
         data = pd.read_excel(options["input"])
         data.replace("Y", True, inplace=True)
         data.replace("N", False, inplace=True)
-
-        data['Species'] = data['Species'].apply(SPECIES.get_value_by_desc)
+        data.replace("?", None, inplace=True)
 
         for index, row in data.iterrows():
             record = {}
             for source, target in columnsDict.items():
-                record[target] = row[source]
+                if row[source] is not None:
+                    record[target] = row[source]
 
             dataset = Dataset(**record)
-            print(dataset.full_clean())
+            print(f"Insert {record} into database")
+            dataset.save()

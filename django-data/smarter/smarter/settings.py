@@ -33,7 +33,8 @@ ALLOWED_HOSTS = ['*']
 if DEBUG:
     import socket  # only if you haven't already imported this
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2", "192.168.1.5"]
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [
+        "127.0.0.1", "10.0.2.2"]
 
 # Application definition
 
@@ -66,7 +67,7 @@ ROOT_URLCONF = 'smarter.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ BASE_DIR / "templates" ],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,7 +136,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/smarter/static/'
-MEDIA_URL  = '/smarter/media/'
+MEDIA_URL = '/smarter/media/'
 
 # collect all Django static files in the static folder
 
