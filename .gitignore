@@ -5,6 +5,8 @@ postgres-data/
 *password*
 django-data/smarter/static/
 django-data/smarter/media/
+*.xls*
+*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
