@@ -11,7 +11,46 @@ from enum import Enum
 from django.db import models
 
 
-class SPECIES(Enum):
+class EnumMixin():
+    """Common methods for my Enum classes"""
+
+    @classmethod
+    def get_value(cls, member):
+        """Get numerical representation of an Enum object"""
+
+        return cls[member].value[0]
+
+    @classmethod
+    def get_value_display(cls, value):
+        """Get the display value from a key"""
+
+        if value is None:
+            return None
+
+        for el in cls:
+            if el.value[0] == value:
+                return el.value[1]
+
+        raise KeyError("value %s not in %s" % (value, cls))
+
+    @classmethod
+    def get_value_by_desc(cls, value):
+        """
+        Get numerical representation of an Enum object by providing a
+        description
+        """
+
+        if value is None:
+            return None
+
+        for el in cls:
+            if el.value[1] == value:
+                return el.value[0]
+
+        raise KeyError("value '%s' not in '%s'" % (value, cls))
+
+
+class SPECIES(EnumMixin, Enum):
     sheep = (0, "Sheep")
     goat = (1, "Goat")
 

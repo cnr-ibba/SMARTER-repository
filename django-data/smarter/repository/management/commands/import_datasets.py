@@ -11,7 +11,7 @@ Fill Dataset by reading XLS file
 import pandas as pd
 
 from django.core.management.base import BaseCommand, CommandError
-from repository.models import Dataset
+from repository.models import Dataset, SPECIES
 
 
 columnsDict = {
@@ -40,6 +40,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         data = pd.read_excel(options["input"])
+        data.replace("Y", True, inplace=True)
+        data.replace("N", False, inplace=True)
+
+        data['Species'] = data['Species'].apply(SPECIES.get_value_by_desc)
 
         for index, row in data.iterrows():
             record = {}
@@ -47,4 +51,4 @@ class Command(BaseCommand):
                 record[target] = row[source]
 
             dataset = Dataset(**record)
-            print(dataset)
+            print(dataset.full_clean())
