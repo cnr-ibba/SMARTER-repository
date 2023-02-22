@@ -172,6 +172,20 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-transfer"
+version = "0.4"
+description = "A django application that offloads file transfers to a downstream proxy."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-transfer-0.4.tar.gz", hash = "sha256:75ecd9ef287493914e51d9828acacd8737e5e3cae32b24ef46cb7495ebda9d5d"},
+]
+
+[package.dependencies]
+six = ">=1.9.0"
+
+[[package]]
 name = "et-xmlfile"
 version = "1.1.0"
 description = "An implementation of lxml.xmlfile for the standard library"
@@ -640,4 +654,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "1c67bb0c5fe7a5e589eaba74b0f7e8033ebf9fdb753376791312bb70ab3474f9"
+content-hash = "271dd5a4054346c9a406213bda90ec1cbe3e94230d8e2de05a77f6e4631568fe"
