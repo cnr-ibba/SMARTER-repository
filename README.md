@@ -272,8 +272,8 @@ example for smarter project:
 ```python
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-STATIC_URL = '/smarter/static/'
-MEDIA_URL  = '/smarter/media/'
+STATIC_URL = '/smarter-repository/static/'
+MEDIA_URL  = '/smarter-repository/media/'
 
 # collect all Django static files in the static folder
 STATIC_ROOT = BASE_DIR / "static"
@@ -399,7 +399,7 @@ Place the followin code inside NGINX server environment. Remember to specify the
 port exported by your docker NGINX instance:
 
 ```conf
-location /smarter/ {
+location /smarter-repository/ {
   # set variable in location
   set $my_port 10080;
 
