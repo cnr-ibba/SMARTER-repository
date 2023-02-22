@@ -6,8 +6,38 @@
 {% block content %}
 <div class="container mt-4">
     <form method="get">
-        {{ filter.form.as_p }}
-        <input type="submit" />
+        <div class="row g-3 align-items-center">
+            <div class="col-auto">
+                <label for="{{ filter.form.data_type.id_for_label }}" class="col-form-label">Data type:</label>
+            </div>
+            <div class="col-auto">
+                <input
+                    type="text"
+                    id="{{ filter.form.data_type.id_for_label }}"
+                    name="{{ filter.form.data_type.html_name }}"
+                    class="form-control"
+                    aria-describedby="Data type"
+                    value="{{ filter.form.data_type.value | default_if_none:"" }}">
+            </div>
+            <div class="col-auto">
+                <label for="{{ filter.form.species.id_for_label }}" class="col-form-label">Species:</label>
+            </div>
+            <div class="col-auto">
+                <input
+                    type="text"
+                    id="{{ filter.form.species.id_for_label }}"
+                    name="{{ filter.form.species.html_name }}"
+                    class="form-control"
+                    aria-describedby="Species"
+                    value="{{ filter.form.species.value | default_if_none:"" }}">
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+            <div class="col-auto">
+                <a class="btn btn-warning" href="{% url 'dataset-list' %}">Reset</a>
+            </div>
+        </div>
     </form>
     <table class="table table-striped">
         <thead>
