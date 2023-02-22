@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap5',
     'debug_toolbar',
+    'django_filters',
     'accounts.apps.AccountsConfig',
     'repository.apps.RepositoryConfig',
 ]
