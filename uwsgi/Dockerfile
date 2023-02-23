@@ -81,6 +81,7 @@ RUN apt-get update && apt-get install -y \
     libmariadb3 \
     mariadb-client \
     libxml2 \
+    libmagic-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Set some useful variables
