@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'bootstrap5',
     'debug_toolbar',
     'django_filters',
+    'django_transfer',
     'accounts.apps.AccountsConfig',
     'repository.apps.RepositoryConfig',
 ]
@@ -154,3 +155,17 @@ LOGIN_REDIRECT_URL = 'index'
 
 # https://docs.djangoproject.com/en/4.1/ref/settings/#std-setting-LOGIN_URL
 LOGIN_URL = "login"
+
+# https://github.com/smartfile/django-transfer#downloading
+TRANSFER_SERVER = 'nginx'
+
+# force NGINX transfer even in DEBUG mode
+ENABLE_TRANSFER = True
+
+# where I can find shared files
+SHARED_DIR = BASE_DIR.parent / "data"
+
+TRANSFER_MAPPINGS = {
+    # the real position of data dir with the protected nginx folder
+    str(SHARED_DIR): '/smarter-repository/protected/',
+}

@@ -6,11 +6,15 @@ Created on Tue Feb 21 16:15:46 2023
 @author: Paolo Cozzi <paolo.cozzi@ibba.cnr.it>
 """
 
+import magic
+import django_filters
 
 from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_filters.views import FilterView
-import django_filters
+from django_transfer import TransferHttpResponse
+from django.conf import settings
 
 from .models import Dataset
 
@@ -38,3 +42,13 @@ class DataSetListView(LoginRequiredMixin, FilterView):
     filterset_class = DatasetFilter
     paginate_by = 8
     filterset_fields = ('data_type',)
+
+
+@login_required()
+def download(request, file_name):
+    file_path = str(settings.SHARED_DIR / file_name)
+
+    # https://ajrbyers.medium.com/file-mime-types-in-django-ee9531f3035b
+    mimetype = magic.from_file(file_path, mime=True)
+
+    return TransferHttpResponse(file_path, mimetype=mimetype)

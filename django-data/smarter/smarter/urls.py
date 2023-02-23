@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.views import LogoutView
 
-from repository.views import IndexView, DataSetListView
+from repository.views import IndexView, DataSetListView, download
 from accounts.views import UpdatedLoginView
 
 urlpatterns = [
@@ -28,6 +28,7 @@ urlpatterns = [
         'logout',
         LogoutView.as_view(template_name="accounts/logged_out.html"),
         name="logout"),
-    path('', IndexView.as_view(), name="index"),
     path('datasets', DataSetListView.as_view(), name="dataset-list"),
+    path('download/<str:file_name>', download, name='download'),
+    path('', IndexView.as_view(), name="index"),
 ]
