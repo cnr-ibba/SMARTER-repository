@@ -3,7 +3,8 @@ mysql-data/
 postgres-data/
 .env
 *password*
-django-data/smarter/static/
+django-data/smarter/static/admin/
+django-data/smarter/static/debug_toolbar/
 django-data/smarter/media/
 *.xls*
 *.csv
