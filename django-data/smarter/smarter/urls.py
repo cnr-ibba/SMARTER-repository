@@ -29,6 +29,6 @@ urlpatterns = [
         LogoutView.as_view(template_name="accounts/logged_out.html"),
         name="logout"),
     path('datasets', DataSetListView.as_view(), name="dataset-list"),
-    path('download/<str:file_name>', download, name='download'),
+    path('download/<path:file_name>', download, name='download'),
     path('', IndexView.as_view(), name="index"),
 ]

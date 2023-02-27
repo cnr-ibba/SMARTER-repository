@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load filename %}
 
 {% block title %}SMARTER Dataset List{% endblock title %}
 
@@ -52,7 +53,7 @@
                     <th scope="col">Time series data</th>
                     <th scope="col">Individual data</th>
                     <th scope="col">Contact</th>
-                    <th scope="col">Submitted for DB SMARTER</th>
+                    <th scope="col">Download</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,7 +68,11 @@
                     <td>{{ dataset.time_series | yesno:"Yes,No,?" }}</td>
                     <td>{{ dataset.individual_data | yesno:"Yes,No,?" }}</td>
                     <td>{{ dataset.contact }}</td>
-                    <td>{{ dataset.submitted | yesno:"Yes,No,?" }}</td>
+                    <td class="text-center">
+                        {% if dataset.submitted %}
+                        <a href="{% url 'download' dataset.filename %}" download={{ dataset.filename|filename }}><i class="bi bi-download"></i></a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

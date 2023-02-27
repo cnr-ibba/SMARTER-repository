@@ -40,7 +40,7 @@ class DataSetListView(LoginRequiredMixin, FilterView):
     """Display SMARTER datasets"""
 
     filterset_class = DatasetFilter
-    paginate_by = 8
+    paginate_by = 10
     filterset_fields = ('data_type',)
 
 
