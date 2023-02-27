@@ -8,6 +8,7 @@ Created on Tue Feb 21 12:38:31 2023
 Fill Dataset by reading XLS file
 """
 
+import numpy as np
 import pandas as pd
 
 from django.core.management.base import BaseCommand
@@ -24,7 +25,8 @@ columnsDict = {
     'Time series data (Y/N)': 'time_series',
     'Individual data (Y/N)': 'individual_data',
     'Contact': 'contact',
-    'Submitted for DB SMARTER': 'submitted'
+    'Submitted for DB SMARTER': 'submitted',
+    'Filename': 'filename',
 }
 
 
@@ -47,7 +49,7 @@ class Command(BaseCommand):
         for index, row in data.iterrows():
             record = {}
             for source, target in columnsDict.items():
-                if row[source] is not None:
+                if row[source] not in [None, np.nan]:
                     record[target] = row[source]
 
             dataset = Dataset(**record)

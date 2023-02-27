@@ -17,7 +17,8 @@ class DatasetAdmin(admin.ModelAdmin):
         'wp',
         'task',
         'contact',
-        'submitted'
+        'submitted',
+        'filename',
     )
 
 

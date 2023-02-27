@@ -7,6 +7,7 @@ Created on Tue Feb 21 11:53:39 2023
 """
 
 from django.db import models
+from django.conf import settings
 
 
 class Dataset(models.Model):
@@ -28,11 +29,19 @@ class Dataset(models.Model):
         help_text="Who owns data (ex. INRAE)"
     )
     embargo = models.BooleanField(null=True, blank=True)
-    time_series = models.BooleanField(null=True)
-    individual_data = models.BooleanField(null=True)
+    time_series = models.BooleanField(null=True, blank=True)
+    individual_data = models.BooleanField(null=True, blank=True)
+
     # HINT: should this be an email?
     contact = models.CharField(max_length=50)
     submitted = models.BooleanField(default=False)
+
+    filename = models.FilePathField(
+        path=str(settings.SHARED_DIR),
+        null=True,
+        blank=True,
+        unique=True,
+    )
 
     def __str__(self):
         return f"{self.data_type} (WP{self.wp})"
