@@ -1,0 +1,12 @@
+{
+    "cSpell.words": [
+        "adminer",
+        "autoreload",
+        "collectstatic",
+        "createsuperuser",
+        "daemonized",
+        "initdb",
+        "makemigrations",
+        "uwsgi"
+    ]
+}

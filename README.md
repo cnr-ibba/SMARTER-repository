@@ -1,11 +1,15 @@
 
-# Running Django+MySQL-uwsgi with docker-compose
+# SMARTER-repository
 
-This guide describe how to build and run Django+MySQL with docker-compose. First of all
-copy this directory in another location since you will modify code in order to
-develop your application. Next, rename the whole directory with a project name.
-In this example, project is set to `smarter`. Replace all `smarter` occurrences with your
-project name.
+The SMARTER data repository
+
+## Introduction
+
+This guide describe how to set-up a working instance of SMARTER-repository. This
+project was developed in [Django](https://www.djangoproject.com/) with
+[docker-compose](https://docs.docker.com/compose/): you will require
+docker-compose in order to set-up and run your own copy of SMARTER-repository.
+
 In this project there are directories that will be mounted as data volume:
 this will make easier to
 develop the code or re-spawn the docker application on another location using the same
@@ -14,12 +18,12 @@ data files will be placed in `mysql-data` directory and all django data
 will be placed in `django-data` directory inside this project. When such directories are
 created for the first time, there are created and mounted as a root directories. After
 permission can be fixed according user need. For example processes like `nginx`
-and `uswgi` work with a different user from root, and so files need to be accessed
+and `uwsgi` work with a different user from root, and so files need to be accessed
 at least in read mode
 
 ## The docker-compose.yml file
 
-Before to start take a look in the `docker-compose.yml` file. This is the
+Before starting, take a look in the `docker-compose.yml` file. This is the
 configuration file used by `docker-compose` commands. All `docker-compose`
 commands need to be instantiated in this directory or by specifying the path of
 `docker-compose.yml` file, as stated by the [docker compose documentation](https://docs.docker.com/compose/).
@@ -42,14 +46,15 @@ directories will be placed inside this project directory, in order to facilitate
 application. When data directories are created for the first time, the
 ownership of such directories is the same of the service running in the
 container. You can change it according your needs, but remember that services
-run under a *non privileged* user, so you have to define **at least** the *read* privileged for files, and the *read-execute* privileges for directories.
+run under a *non privileged* user, so you have to define **at least** the *read*
+privileged for files, and the *read-execute* privileges for directories.
 
 ## Setting up *.env* variables
 
 You can set variables like password and users using
 [environment variables](https://docs.docker.com/compose/environment-variables/)
 that could be passed on runtime or by *env files*. The default *env file* is a `.env`
-file placed inside django docker-composed root directory. This file **MUSTN'T** be
+file placed inside django docker-composed root directory. This file **MUST NOT** be
 tracked using *CVS*
 
 > You should also store sensitive informations using [docker secrets](https://docs.docker.com/v17.12/engine/swarm/secrets/)
@@ -60,7 +65,7 @@ Create a `.env` file inside project directory, and set the following variables:
 DEBUG=True
 MYSQL_ROOT_PASSWORD=<mysql password>
 SECRET_KEY=<your django secret key>
-MYSQL_DATABASE=<django database name>
+MYSQL_DATABASE=smarter
 MYSQL_USER=<django user>
 MYSQL_PASSWORD=<django password>
 ```
@@ -74,7 +79,7 @@ type:
 docker-compose up -d db
 ```
 
-Once `db` container is instantiated for the first time, `mysql-data` directory is created
+Once `db` container is instantiated for the first time, `mysql-data` content is created
 and MySQL is configured to have users and password as described in the `.env` file.
 After that, container could be destroyed and data will persists inside `mysql-data`
 directory. If you need extra stuff to be done after database creation, you could
@@ -82,7 +87,7 @@ define *sql* and *sh* scripts inside a directory that need to be mounted in
 `/docker-entrypoint-initdb.d/` as in the following example:
 
 ```yml
-# to export volume, as recommeded in https://registry.hub.docker.com/u/library/mysql/
+# to export volume, as recommended in https://registry.hub.docker.com/u/library/mysql/
 volumes:
   - type: bind
     source: ./mysql-data/
@@ -129,7 +134,7 @@ You can access to mysql container using adminer, you need to connect to
 docker composed instance using the same network, for example:
 
 ```bash
-docker run -d --link django-db-1:db -p 8080:8080 --name adminer --network django_default adminer
+docker run -d --link smarter-repository-db-1:db -p 8080:8080 --name adminer --network django_default adminer
 ```
 
 More information could be found in [adminer - docker hub][adminer-docker-documentation]
@@ -182,36 +187,23 @@ in poetry documentation to have more information.
 
 > TODO: manage dependencies using docker containers
 
-### Creating a project for the first time
+### The django-data folder
 
-For such example, we suppose that the django project name will be `smarter` as stated
-by the [django tutorial](https://docs.djangoproject.com/en/1.11/intro/tutorial01/#creating-a-project).
-The `smarter_uwsgi.ini` in `django-data` directory contains uwsgi configuration for this application.
-The default path of the application is the `smarter` directory of the django tutorial.
-If you want to modify the project directories, remember to modify `docker-compose.yml`
-and to rename `smarter_uwsgi.ini`commands according your needs.
-First, you need to generate an empty django project (`smarter` in this example),
-since it's no tracked with this project. If you want to track your project
-modifications, you will do add manually your django folder to your project.
-To create a new project folder, we will use the `django-admin` utility from
-the django container. This will create a new project folder in  `/var/uwsgi/`,
-which is an exported volume of `django-data` folder of this project:
+The `smarter_uwsgi.ini` in `django-data` directory contains uwsgi configuration
+for this application. Remember that data file will be stored in `smarter` directory
+in containers, by the application will be accessible using `smarter-repository`
+URL location. If you want to modify the project directories, remember to modify
+`docker-compose.yml` and `smarter_uwsgi.ini` according your needs.
 
-```bash
-docker-compose run --rm uwsgi django-admin startproject smarter
-```
-
-This will build the django image and runs the `django-admin` script. If there
-are prerequisites, for example containers linked to that, they will be started before
-the `uwsgi` django container. After that, the container stops and we return to the
-shell environment. You may want to fix file permissions in order to edit files, for
-example:
+You may want to fix file permissions in order to edit files, for example:
 
 ```bash
 sudo chown -R ${USER}:www-data django-data
 ```
 
-Next, you may need to set a list of strings representing the host/domain
+### The Django settings.py file
+
+You may need to customize set a list of strings representing the host/domain
 names that this Django site can serve: you will modify the `ALLOWED_HOSTS`
 as described [here][django-allowed-host]. To avoid to store sensitive information
 inside `settings.py`, you may want to refer to [python-decouple](https://github.com/henriquebastos/python-decouple)
@@ -222,7 +214,6 @@ sample directory of `settings.py`
 [django-allowed-host]: https://docs.djangoproject.com/en/1.11/ref/settings/#allowed-hosts
 
 ```python
-
 from decouple import config
 
 # ... other stuff
@@ -236,9 +227,7 @@ DEBUG = config('DEBUG', cast=bool, default=False)
 ALLOWED_HOSTS = ['*']
 ```
 
-Now we need to set up the database connection. You may want
-change default ownership to edit files. Replace the `DATABASES = ...` definition
-in `django-data/smarter/smarter/settings.py` accordingly your project database settings:
+The same applies for the database section of the configuration file:
 
 ```python
 DATABASES = {
@@ -257,7 +246,7 @@ DATABASES = {
 ```
 
 Note that the `db` host is the same name used in `docker-compose.yml`. User, database
-and password are the same specified in the example above. Remember to set the timezone:
+and password are the same specified in the above. Remember to set the timezone:
 docker compose will export HOST /etc/localtime in read only mode, but it's better
 to set timezone also in django in order to have correct times:
 
@@ -290,44 +279,49 @@ the `collectstatic` command in order to place the static files in their director
 ```bash
 mkdir django-data/smarter/static/
 mkdir django-data/smarter/media/
-docker-compose run --rm uwsgi python smarter/manage.py collectstatic
+docker-compose run --rm -u $(id -u):www-data uwsgi python manage.py collectstatic
 ```
 
-#### Auto restart uwsgi when code is modified
+There's also a directory which will be used by django to share files: data inside
+this folder will be server by nginx after ensuring authentication with django:
 
-As stated [here](http://uwsgi-docs.readthedocs.io/en/latest/ThingsToKnow.html?highlight=autoreload)
-autoreload could be CPU intensive and must be used only in developmente environment:
-*"Some plugins (most notably Python and Perl) have code auto-reloading facilities.
-Although they might sound very appealing, you MUST use them only under development
-as they are really heavy-weight. For example the Python –py-autoreload option will
-scan your whole module tree at every check cycle."*
+```python
+# https://github.com/smartfile/django-transfer#downloading
+TRANSFER_SERVER = 'nginx'
 
-#### Change working_dir in docker compose file
+# force NGINX transfer even in DEBUG mode
+ENABLE_TRANSFER = True
 
-To avoid the necessity of specify relative path every time `manage.py` is called,
-you may want to change the working_directory in `docker-compose.yml` file to point
-on your application directory, for example:
+# where I can find shared files
+SHARED_DIR = BASE_DIR.parent / "data"
 
-```yaml
-  # set working dir for uwsgi
-  working_dir: /var/uwsgi/smarter
+TRANSFER_MAPPINGS = {
+    # the real position of data dir with the protected nginx folder
+    str(SHARED_DIR): '/smarter-repository/protected/',
+}
 ```
 
-This allows to call `manage.py` without specifying the `smarter` project directory.
+The django shared folder is in `django-data/data/`, which will be mounted in
+`/var/uwsgi/data` into `uwsgi` container, but will be server using
+`smarter-repository/download` location, as described by django `smarter/urls.py`
+file.
 
-#### Initialize django database for the first time
+
+## Initialize database for the first time
 
 You may want to run the following commands to create the necessary django tables
-if django database is empty. The path of `manage.py` is not specified, since we
-changed the `working_dir` in `docker-compose.yml`:
+if django database is empty. The path of `manage.py` is not specified, since is
+defined by the `working_dir` in `docker-compose.yml`:
 
 ```bash
-docker-compose run --rm uwsgi python manage.py migrate
+docker-compose run --rm -u $(id -u):www-data uwsgi python manage.py migrate
+docker-compose run --rm -u $(id -u):www-data uwsgi python manage.py makemigrations
+docker-compose run --rm -u $(id -u):www-data uwsgi python manage.py migrate
 ```
 
 More info could be found [here](https://docs.djangoproject.com/en/4.1/intro/tutorial02/#database-setup)
 
-#### Creating an admin user
+## Creating an admin user
 
 You  need to create a user who can login to the admin site. Run the following command:
 
@@ -351,13 +345,14 @@ nginx/
 └── nginx.conf
 ```
 
-The `nginx.conf` contains general configuration for NGINX. If you need to run d
+The `nginx.conf` contains general configuration for NGINX. If you need to run
 different processes or listen for a different number of connection, you may modify
 this file. The `default.conf` located in `conf.d` is the file which need to be modified
 accordingly to your project location. You can modify this file without building
 nginx image, since this directory is imported as a volume in nginx container.
-In this sample configuration, the served application is supposed to be under `smarter`
-location. Django static files are served via nginx by sharing volumes between
+In this configuration, the served application is supposed to be under
+`smarter-repository` location. Django static files are served via nginx
+by sharing volumes between
 django `uwsgi` container. This container expose the standard 80 port outside, but
 `docker-compose.yml` could bind this port to a different one
 
@@ -375,33 +370,16 @@ You can inspect docker logs with
 docker-compose logs
 ```
 
-Container could be stopped and restarted via `docker-compose` compose. Even if
-container are dropped, all files in *data volumes* directories remains and don't
-need to be reconfigured as the first instance. You can also run management commands
-with Docker. To migrate django database, for example, you can run:
-
-```bash
-docker-compose run --rm uwsgi python smarter/manage.py migrate
-```
-
-Or
-
-```bash
-docker-compose run --rm uwsgi python manage.py migrate
-```
-
-If you have set the `working_dir` in `docker-compose.yml` properly.
-
 ## Serving docker containers in docker HOST
 
 You can serve docker compose using HOST NGINX, for instance, via proxy_pass.
 Place the followin code inside NGINX server environment. Remember to specify the
 port exported by your docker NGINX instance:
 
-```conf
+```nginx
 location /smarter-repository/ {
   # set variable in location
-  set $my_port 10080;
+  set $my_port 21080;
 
   # Add info to webpages
   proxy_set_header Host $host;
@@ -413,7 +391,7 @@ location /smarter-repository/ {
   proxy_set_header X-Forwarded-Proto $scheme;
   proxy_pass_header Set-Cookie;
 
-  # Subitting a request to docker service
+  # Submitting a request to docker service
   proxy_pass http://<your_host>:$my_port;
   proxy_redirect http://$host:$my_port/ $scheme://$http_host/;
 }

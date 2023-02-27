@@ -13,7 +13,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
-    # to export volume, as recommeded in https://registry.hub.docker.com/u/library/mysql/
+    # to export volume, as recommended in https://registry.hub.docker.com/u/library/mysql/
     volumes:
       - type: bind
         source: ./mysql-data/
