@@ -52,6 +52,8 @@ class Command(BaseCommand):
                 if row[source] not in [None, np.nan]:
                     record[target] = row[source]
 
-            dataset = Dataset(**record)
-            print(f"Insert {record} into database")
-            dataset.save()
+            # update or create object
+            dataset, created = Dataset.objects.update_or_create(**record)
+
+            if created:
+                print(f"Insert {index}:{record} into database")

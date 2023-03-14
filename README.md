@@ -370,6 +370,32 @@ You can inspect docker logs with
 docker-compose logs
 ```
 
+## Uploading SMARTER data
+
+SMARTER data are managed using DVC (https://dvc.org/). In order to connect to
+the DVC storage endpoint you need to override the default user for SSH url:
+
+```bash
+dvc remote modify --local remote user <your SSH user>
+```
+
+After that, synchronize the data folder using:
+
+```bash
+dvc pull
+```
+
+The `Dataset` table is updated using the `Data_Description_for_Database.xlsx`
+file. Add the new record properly and ensure that in the filename field there's
+the local path of the datafile respect to the `Data_Description_for_Database.xlsx`
+file position. Please, remember to remove the spaces from the file path. After that,
+upload the new data using:
+
+```bash
+docker-compose run --rm -u $(id -u):www-data uwsgi python manage.py \
+  import_datasets --input /var/uwsgi/data/Data_Description_for_Database.xlsx
+```
+
 ## Serving docker containers in docker HOST
 
 You can serve docker compose using HOST NGINX, for instance, via proxy_pass.
