@@ -41,6 +41,7 @@ class Dataset(models.Model):
         null=True,
         blank=True,
         unique=True,
+        max_length=255
     )
 
     class Meta:
