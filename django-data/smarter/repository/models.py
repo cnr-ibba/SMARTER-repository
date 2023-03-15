@@ -41,7 +41,16 @@ class Dataset(models.Model):
         null=True,
         blank=True,
         unique=True,
+        max_length=255
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["data_type", "owner"],
+                name="dataset_datatype_owner_idx"
+            )
+        ]
 
     def __str__(self):
         return f"{self.data_type} (WP{self.wp})"
