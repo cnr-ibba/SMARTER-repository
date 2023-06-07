@@ -306,7 +306,6 @@ The django shared folder is in `django-data/data/`, which will be mounted in
 `smarter-repository/download` location, as described by django `smarter/urls.py`
 file.
 
-
 ## Initialize database for the first time
 
 You may want to run the following commands to create the necessary django tables
@@ -372,8 +371,17 @@ docker-compose logs
 
 ## Uploading SMARTER data
 
-SMARTER data are managed using DVC (https://dvc.org/). In order to connect to
-the DVC storage endpoint you need to override the default user for SSH url:
+SMARTER data are managed using DVC (<https://dvc.org/>). You need to install
+DVC in order to get SMARTER data (since they aren't tracked in git repository).
+You may want to install DVC *git hooks* in order to better manage this repository
+and data:
+
+```bash
+dvc install
+```
+
+In order to connect to the DVC storage endpoint,
+you need to override the default user for SSH url:
 
 ```bash
 dvc remote modify --local remote user <your SSH user>
