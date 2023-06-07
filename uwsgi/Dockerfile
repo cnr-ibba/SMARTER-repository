@@ -1,12 +1,12 @@
 
 #
-# VERSION 0.7
+# VERSION 0.8
 # DOCKER-VERSION  23.0.0
 # AUTHOR:         Paolo Cozzi <paolo.cozzi@ibba.cnr.it>
 # DESCRIPTION:    A django container working on django 4.1 on python 3.11
 # TO_BUILD:       docker build --rm -t django_uwsgi -f Dockerfile ..
 # TO_RUN:         docker run -d -P django_uwsgi
-# TO_TAG:         docker tag django_uwsgi:latest django_uwsgi:0.7
+# TO_TAG:         docker tag django_uwsgi:latest django_uwsgi:0.8
 #
 
 ###############################################################################
@@ -40,11 +40,12 @@ ENV \
 ENV \
     POETRY_VERSION=${POETRY_VERSION} \
     POETRY_HOME="/opt/poetry" \
+    POETRY_VIRTUALENVS_CREATE=1 \
     POETRY_VIRTUALENVS_IN_PROJECT=true \
     POETRY_NO_INTERACTION=1
 
 # Install Poetry - require $POETRY_VERSION & $POETRY_HOME environment variables
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python
+RUN curl -sSL https://install.python-poetry.org | python -
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
 # CREATE APP_PATH
