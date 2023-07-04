@@ -6,6 +6,7 @@ postgres-data/
 django-data/smarter/static/admin/
 django-data/smarter/static/debug_toolbar/
 django-data/smarter/media/
+.~*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
