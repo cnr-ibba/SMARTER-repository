@@ -10,8 +10,6 @@ import magic
 import django_filters
 
 from django.views.generic import TemplateView
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django_filters.views import FilterView
 from django_transfer import TransferHttpResponse
 from django.conf import settings
@@ -36,7 +34,7 @@ class DatasetFilter(django_filters.FilterSet):
         fields = ['data_type', 'species']
 
 
-class DataSetListView(LoginRequiredMixin, FilterView):
+class DataSetListView(FilterView):
     """Display SMARTER datasets"""
 
     filterset_class = DatasetFilter
@@ -44,7 +42,6 @@ class DataSetListView(LoginRequiredMixin, FilterView):
     filterset_fields = ('data_type',)
 
 
-@login_required()
 def download(request, file_name):
     file_path = str(settings.SHARED_DIR / file_name)
 
