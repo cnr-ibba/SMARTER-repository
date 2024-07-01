@@ -172,7 +172,7 @@ poetry add <dependency>
 Then update the `poetry.lock` using:
 
 ```bash
-poetry install
+poetry install --no-root
 ```
 
 This will install your packages in your local environment (not inside the docker
